@@ -5,19 +5,30 @@ Stopwatch sw = Stopwatch.StartNew();
 Console.WriteLine("[Dashboard] Memuat data halaman produk...");
 
 // Memulai 3 Task secara independen & paralel
-Task<string> getProductTask = FetchProductDataAsync();
-Task<string> getPromoTask = FetchPromoDataAsync();
-Task<string> getRecommendationTask = FetchRecommendationsAsync();
+//Task<string> getProductTask = FetchProductDataAsync();
+//Task<string> getPromoTask = FetchPromoDataAsync();
+//Task<string> getRecommendationTask = FetchRecommendationsAsync();
 
 // Menunggu ketiga task selesai secara paralel
-await Task.WhenAll(getProductTask, getPromoTask, getRecommendationTask);
+//await Task.WhenAll(getProductTask, getPromoTask, getRecommendationTask);
+
+//Sequential (blocking) approach
+string getProductTask = await FetchProductDataAsync();
+string getPromoTask = await FetchPromoDataAsync();
+string getRecommendationTask = await FetchRecommendationsAsync();
+
 
 sw.Stop();
 Console.WriteLine($"-- > SELESAI dalam { sw.ElapsedMilliseconds}ms!");
-Console.WriteLine($"Result 1: {getProductTask.Result}");
-Console.WriteLine($"Result 2: {getPromoTask.Result}");
-Console.WriteLine($"Result 3: {getRecommendationTask.Result}");
 
+Console.WriteLine($"Result 1: {getProductTask}");
+Console.WriteLine($"Result 2: {getPromoTask}");
+Console.WriteLine($"Result 3: {getRecommendationTask}");
+
+//Parallel approach
+//Console.WriteLine($"Result 1: {getProductTask.Result}");
+//Console.WriteLine($"Result 2: {getPromoTask.Result}");
+//Console.WriteLine($"Result 3: {getRecommendationTask.Result}");
 static async Task<string> FetchProductDataAsync()
 {
     await Task.Delay(1000); // Simulasi I/O Query DB 1 detik
